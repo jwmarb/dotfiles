@@ -1,6 +1,10 @@
 sudo pacman -Syu
 
-sudo pacman -S pavucontrol \
+git clone https://aur.archlinux.org/paru.git && \
+  cd paru && \
+  makepkg -si
+
+paru -Sy pavucontrol \
   pulseaudio \
   kitty \
   base-devel \
@@ -32,3 +36,12 @@ sudo pacman -S pavucontrol \
   network-manager-applet
 
 mkdir -p "$HOME/wallpapers/walls"
+mkdir -p "$HOME/.config"
+
+for folder in "$(pwd)/.config"/*; do
+  folder=$(basename $folder)
+  if [[ -e "$HOME/.config/$folder" ]]; then
+    rm -rf "$HOME/.config/$folder"
+  fi
+  ln -s "$(pwd)/.config/$folder" "$HOME/.config/$folder"
+done
