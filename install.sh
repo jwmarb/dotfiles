@@ -33,10 +33,13 @@ paru -Sy pavucontrol \
   pavucontrol \
   pulsemixer \
   nm-connection-editor \
-  network-manager-applet
+  network-manager-applet \
+  illogical-impulse-bibata-modern-classic-bin
+  
 
 mkdir -p "$HOME/wallpapers/walls"
 mkdir -p "$HOME/.config"
+mkdir -p "$HOME/.config/kitty"
 
 for folder in "$(pwd)/.config"/*; do
   folder=$(basename $folder)
