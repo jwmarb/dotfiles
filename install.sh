@@ -1,11 +1,12 @@
 sudo pacman -Syu
 
-git clone https://aur.archlinux.org/paru.git && \
-  cd paru && \
-  makepkg -si
+if [[ ! -d "paru" ]]; then
+  git clone https://aur.archlinux.org/paru.git && \
+    cd paru && \
+    makepkg -si
+fi
 
-paru -Sy pavucontrol \
-  pulseaudio \
+paru -Sy \
   kitty \
   base-devel \
   fastfetch \
@@ -31,15 +32,15 @@ paru -Sy pavucontrol \
   pipewire-alsa \
   pipewire-jack \
   pavucontrol \
-  pulsemixer \
   nm-connection-editor \
   network-manager-applet \
-  illogical-impulse-bibata-modern-classic-bin
+  illogical-impulse-bibata-modern-classic-bin \
+  ttf-fira-code \
   
-
-mkdir -p "$HOME/wallpapers/walls"
+cp -r ./wallpapers "$HOME/"
 mkdir -p "$HOME/.config"
 mkdir -p "$HOME/.config/kitty"
+mkdir -p "$HOME/.cache/wal"
 
 for folder in "$(pwd)/.config"/*; do
   folder=$(basename $folder)
