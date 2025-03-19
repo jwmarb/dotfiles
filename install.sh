@@ -40,7 +40,7 @@ paru -Sy \
   illogical-impulse-bibata-modern-classic-bin \
   wofi \
   zen-browser \
-  wdisplays \
+  wdisplays
   
 cp -r ./wallpapers "$HOME/"
 cp -r .cache/* ~/.cache/
