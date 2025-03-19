@@ -84,10 +84,10 @@ window {
   box-shadow: 1px 1px 5px rgba(255, 255, 255, 0.03);
   border: none;
   border-radius: 20px;
-  background-color: alpha(@color1, 0.16);
+  background-color: alpha(@color10, 0.16);
 }
 #entry:selected #text {
-  color: @color13;
+  color: @color10;
 }
 
 #entry:drop(active) {
