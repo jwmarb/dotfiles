@@ -1,3 +1,5 @@
+FONTS="ttf-fira-code ttf-firacode-nerd ttf-font-awesome"
+
 sudo pacman -Syu
 
 if [[ ! -d "paru" ]]; then
@@ -7,6 +9,7 @@ if [[ ! -d "paru" ]]; then
 fi
 
 paru -Sy \
+  $FONTS \
   kitty \
   base-devel \
   fastfetch \
@@ -35,14 +38,18 @@ paru -Sy \
   nm-connection-editor \
   network-manager-applet \
   illogical-impulse-bibata-modern-classic-bin \
-  ttf-fira-code \
+  wofi \
+  zen-browser \
+  wdisplays \
   
 cp -r ./wallpapers "$HOME/"
 cp -r .cache/* ~/.cache/
+touch ~/.cache/wal/colors-kitty.conf
 mkdir -p "$HOME/.config"
 mkdir -p "$HOME/.config/kitty"
-mkdir -p "$HOME/.config/kitty"
 mkdir -p "$HOME/.cache/wal"
+
+echo 'eval $(starship init bash)' >> $HOME/.bashrc
 
 for folder in "$(pwd)/.config"/*; do
   folder=$(basename $folder)
@@ -51,3 +58,5 @@ for folder in "$(pwd)/.config"/*; do
   fi
   ln -s "$(pwd)/.config/$folder" "$HOME/.config/$folder"
 done
+
+echo "POST-INSTALL: Run \"nwg-look\" to configure the theme"
