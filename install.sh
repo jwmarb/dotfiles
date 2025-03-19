@@ -1,4 +1,5 @@
 FONTS="ttf-fira-code ttf-firacode-nerd ttf-font-awesome"
+BROWSER="zen-browser"
 
 sudo pacman -Syu
 
@@ -10,6 +11,7 @@ fi
 
 paru -Sy \
   $FONTS \
+  cmake \
   kitty \
   base-devel \
   fastfetch \
@@ -39,7 +41,7 @@ paru -Sy \
   network-manager-applet \
   illogical-impulse-bibata-modern-classic-bin \
   wofi \
-  zen-browser \
+  $BROWSER \
   wdisplays \
   pamixer \
   sddm \
@@ -72,7 +74,9 @@ for folder in "$(pwd)/.config"/*; do
   ln -s "$(pwd)/.config/$folder" "$HOME/.config/$folder"
 done
 
+sudo systemctl enable sddm
+sudo systemctl start sddm
+
 echo "POST-INSTALL INSTRUCTIONS:"
 echo " - Press Alt + W and select the wallpaper to initialize the widgets"
-echo " - "
 echo " - Run \"nwg-look\" to configure the theme"
