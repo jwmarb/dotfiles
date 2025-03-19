@@ -40,7 +40,14 @@ paru -Sy \
   illogical-impulse-bibata-modern-classic-bin \
   wofi \
   zen-browser \
-  wdisplays
+  wdisplays \
+  pamixer \
+  sddm \
+  qt6-svg \
+  qt6-virtualkeyboard \
+  qt6-multimedia-ffmpeg \
+  sddm-astronaut-theme \
+
   
 cp -r ./wallpapers "$HOME/"
 cp -r .cache/* ~/.cache/
@@ -49,6 +56,10 @@ mkdir -p "$HOME/.config"
 mkdir -p "$HOME/.config/kitty"
 mkdir -p "$HOME/.cache/wal"
 
+echo "[Theme]
+Current=sddm-astronaut-theme" | sudo tee /etc/sddm.conf
+echo "[General]
+InputMethod=qtvirtualkeyboard" | sudo tee /etc/sddm.conf.d/virtualkbd.conf
 echo 'eval $(starship init bash)' >> $HOME/.bashrc
 
 for folder in "$(pwd)/.config"/*; do
@@ -59,4 +70,7 @@ for folder in "$(pwd)/.config"/*; do
   ln -s "$(pwd)/.config/$folder" "$HOME/.config/$folder"
 done
 
-echo "POST-INSTALL: Run \"nwg-look\" to configure the theme"
+echo "POST-INSTALL INSTRUCTIONS:"
+echo " - Press Alt + W and select the wallpaper to initialize the widgets"
+echo " - "
+echo " - Run \"nwg-look\" to configure the theme"
