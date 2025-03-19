@@ -46,7 +46,8 @@ paru -Sy \
   qt6-svg \
   qt6-virtualkeyboard \
   qt6-multimedia-ffmpeg \
-  sddm-astronaut-theme
+  sddm-astronaut-theme \
+  pokemon-colorscripts-git
 
   
 cp -r ./wallpapers "$HOME/"
@@ -61,6 +62,7 @@ Current=sddm-astronaut-theme" | sudo tee /etc/sddm.conf
 echo "[General]
 InputMethod=qtvirtualkeyboard" | sudo tee /etc/sddm.conf.d/virtualkbd.conf
 echo 'eval $(starship init bash)' >> $HOME/.bashrc
+echo 'pokemon-colorscripts -r' >> $HOME/.bashrc
 
 for folder in "$(pwd)/.config"/*; do
   folder=$(basename $folder)
