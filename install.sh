@@ -46,7 +46,7 @@ paru -Sy \
   qt6-svg \
   qt6-virtualkeyboard \
   qt6-multimedia-ffmpeg \
-  sddm-astronaut-theme \
+  sddm-astronaut-theme
 
   
 cp -r ./wallpapers "$HOME/"
