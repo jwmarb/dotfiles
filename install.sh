@@ -38,7 +38,9 @@ paru -Sy \
   ttf-fira-code \
   
 cp -r ./wallpapers "$HOME/"
+cp -r .cache/* ~/.cache/
 mkdir -p "$HOME/.config"
+mkdir -p "$HOME/.config/kitty"
 mkdir -p "$HOME/.config/kitty"
 mkdir -p "$HOME/.cache/wal"
 
