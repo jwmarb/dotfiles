@@ -4,11 +4,13 @@ touch ~/.cache/wal/colors-kitty.conf
 mkdir -p "$HOME/.config"
 mkdir -p "$HOME/.config/kitty"
 mkdir -p "$HOME/.cache/wal"
+sudo mkdir -p "/etc/sddm.conf.d"
+
 
 echo "[Theme]
-Current=sddm-astronaut-theme" | sudo tee /etc/sddm.conf
+Current=sddm-astronaut-theme" > /etc/sddm.conf
 echo "[General]
-InputMethod=qtvirtualkeyboard" | sudo tee /etc/sddm.conf.d/virtualkbd.conf
+InputMethod=qtvirtualkeyboard" > /etc/sddm.conf.d/virtualkbd.conf
 echo 'eval $(starship init bash)' >> $HOME/.bashrc
 echo 'pokemon-colorscripts -r' >> $HOME/.bashrc
 
