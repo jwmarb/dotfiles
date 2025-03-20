@@ -1,5 +1,18 @@
-FONTS="ttf-fira-code ttf-firacode-nerd ttf-font-awesome"
+#!/bin/bash
+CONFIG_PATH="$HOME/.config/hypr/hyprland.conf"
+
+FONTS="ttf-fira-code ttf-firacode-nerd ttf-font-awesome noto-fonts-emoji illogical-impulse-bibata-modern-classic-bin"
 BROWSER="zen-browser"
+DEV_TOOLS="cmake base-devel"
+TERMINAL="kitty fastfetch starship btop fd"
+HYPRLAND="hyprland swaync hypridle hyprpicker hyprshot hyprlock wlogout"
+THEMING="python-pywal swww waybar nwg-look qogir-icon-theme materia-gtk-theme"
+FILE_MANAGER="nemo"
+AUDIO="pipewire pipewire-pulse pipewire-alsa pipewire-jack pavucontrol"
+NETWORK="nm-connection-editor network-manager-applet"
+UTILITIES="wofi wdisplays pamixer"
+DISPLAY_MANAGER="sddm sddm-astronaut-theme qt6-svg qt6-virtualkeyboard qt6-multimedia-ffmpeg"
+MISC="pokemon-colorscripts-git"
 
 sudo pacman -Syu
 
@@ -11,46 +24,23 @@ fi
 
 paru -Sy \
   $FONTS \
-  cmake \
-  kitty \
-  base-devel \
-  fastfetch \
-  python-pywal \
-  swww \
-  waybar \
-  hyprland \
-  swaync \
-  starship \
-  hypridle \
-  hyprpicker \
-  hyprshot \
-  hyprlock \
-  wlogout \
-  fd \
-  nwg-look \
-  qogir-icon-theme \
-  materia-gtk-theme \
-  nemo \
-  btop \
-  pipewire \
-  pipewire-pulse \
-  pipewire-alsa \
-  pipewire-jack \
-  pavucontrol \
-  nm-connection-editor \
-  network-manager-applet \
-  illogical-impulse-bibata-modern-classic-bin \
-  wofi \
   $BROWSER \
-  wdisplays \
-  pamixer \
-  sddm \
-  qt6-svg \
-  qt6-virtualkeyboard \
-  qt6-multimedia-ffmpeg \
-  sddm-astronaut-theme \
-  pokemon-colorscripts-git
+  $DEV_TOOLS \
+  $TERMINAL \
+  $HYPRLAND \
+  $THEMING \
+  $FILE_MANAGER \
+  $AUDIO \
+  $NETWORK \
+  $UTILITIES \
+  $DISPLAY_MANAGER \
+  $MISC
 
+hyprland & 
+
+while [[ ! -f "$CONFIG_PATH"]]; do
+  sleep 1
+done
   
 cp -r ./wallpapers "$HOME/"
 cp -r .cache/* ~/.cache/
@@ -75,8 +65,7 @@ for folder in "$(pwd)/.config"/*; do
 done
 
 sudo systemctl enable sddm
-sudo systemctl start sddm
 
 echo "POST-INSTALL INSTRUCTIONS:"
-echo " - Press Alt + W and select the wallpaper to initialize the widgets"
+echo " - Press Alt + W and select the wallpaper to initialize the widgets and color theme"
 echo " - Run \"nwg-look\" to configure the theme"
