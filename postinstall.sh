@@ -1,9 +1,10 @@
-cp -r ./wallpapers "$HOME/"
-cp -r .cache/* ~/.cache/
-touch ~/.cache/wal/colors-kitty.conf
 mkdir -p "$HOME/.config"
 mkdir -p "$HOME/.config/kitty"
 mkdir -p "$HOME/.cache/wal"
+
+cp -r ./wallpapers "$HOME/"
+cp -r .cache/* ~/.cache/
+touch ~/.cache/wal/colors-kitty.conf
 sudo mkdir -p "/etc/sddm.conf.d"
 
 
