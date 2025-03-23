@@ -1,4 +1,4 @@
-@import url('/home/joseph/.cache/wal/colors-waybar.css');
+@import url('./.cache/wal/colors-waybar.css');
 
 @define-color mauve  @color9;
 @define-color red  @color9;
@@ -13,8 +13,9 @@
 
 * {
   all: unset;
-  font-family: 'CodeNewRoman Nerd Font Mono', monospace;
-  font-size: 1.5rem;
+  font-family: 'Fira Code Nerd Font Mono', monospace;
+  font-size: 1.125rem;
+  letter-spacing: -0.05em;
   outline: none;
   border: none;
   text-shadow: none;
@@ -83,10 +84,10 @@ window {
   box-shadow: 1px 1px 5px rgba(255, 255, 255, 0.03);
   border: none;
   border-radius: 20px;
-  background-color: alpha(@color1, 0.32);
+  background-color: alpha(@color10, 0.16);
 }
 #entry:selected #text {
-  color: @color13;
+  color: @color10;
 }
 
 #entry:drop(active) {
