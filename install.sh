@@ -16,10 +16,13 @@ MISC="pokemon-colorscripts-git"
 
 sudo pacman -Syu
 
-if [[ ! -d "paru" ]]; then
+if ! command -v paru &> /dev/null; then
+  echo "Installing paru..."
   git clone https://aur.archlinux.org/paru.git && \
     cd paru && \
     makepkg -si
+else
+  echo "paru is already installed, skipping..."
 fi
 
 paru -Sy \
