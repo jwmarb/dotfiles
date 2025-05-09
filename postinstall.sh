@@ -1,3 +1,9 @@
+#!/bin/bash
+if [ "$EUID" -ne 0 ]; then
+  echo "Please run this script with sudo: sudo $0"
+  exit 1
+fi
+
 mkdir -p "$HOME/.config"
 mkdir -p "$HOME/.config/kitty"
 mkdir -p "$HOME/.cache/wal"
@@ -12,8 +18,16 @@ echo "[Theme]
 Current=sddm-astronaut-theme" > /etc/sddm.conf
 echo "[General]
 InputMethod=qtvirtualkeyboard" > /etc/sddm.conf.d/virtualkbd.conf
-echo 'eval $(starship init bash)' >> $HOME/.bashrc
-echo 'pokemon-colorscripts -r' >> $HOME/.bashrc
+
+# Check and add starship init if not already present
+if ! grep -q "eval \$(starship init bash)" $HOME/.bashrc; then
+  echo 'eval $(starship init bash)' >> $HOME/.bashrc
+fi
+
+# Check and add pokemon-colorscripts if not already present
+if ! grep -q "pokemon-colorscripts -r" $HOME/.bashrc; then
+  echo 'pokemon-colorscripts -r' >> $HOME/.bashrc
+fi
 
 for folder in "$(pwd)/.config"/*; do
   folder=$(basename $folder)
