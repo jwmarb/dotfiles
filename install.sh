@@ -52,6 +52,12 @@ while true; do
             break
         elif [[ "$selection" -le "${#BROWSER_OPTIONS[@]}" ]]; then
             BROWSER="${BROWSER_OPTIONS[$((selection-1))]}"
+
+            # Check if the selected browser is firefox or zen-browser-bin
+            if [[ "$BROWSER" == "firefox" || "$BROWSER" == "zen-browser-bin" ]]; then
+                BROWSER="$BROWSER python-pywalfox"
+            fi
+
             echo "Selected browser: $BROWSER"
             break
         fi

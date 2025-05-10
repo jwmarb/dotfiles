@@ -8,6 +8,7 @@ menu() {
 use_wallpaper() {
 	selected_wallpaper=$1
   wal -i "$selected_wallpaper" -n
+	pywalfox update
   swww img "$selected_wallpaper" --transition-type any --transition-fps 60 --transition-duration .5
   swaync-client --reload-css
   cat ~/.cache/wal/colors-kitty.conf > ~/.config/kitty/current-theme.conf
