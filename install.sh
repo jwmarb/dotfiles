@@ -90,11 +90,4 @@ paru -Sy \
   $MISC \
 	$LAPTOP
 
-hyprland &
-HYPRLAND_PID=$!
-
-sleep 3
-
-kill $HYPRLAND_PID 2> /dev/null
-
-sudo ./postinstall.sh
+./postinstall.sh
