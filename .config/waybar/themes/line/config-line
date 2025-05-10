@@ -85,6 +85,7 @@
   },
   "battery": {
     "interval": 30,
+    "on-click-right": "tlpui",
     "states": {
       "good": 95,
       "warning": 30,

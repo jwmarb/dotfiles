@@ -1,2 +1,6 @@
 brightnessctl
 blueman
+bluez
+bluez-utils
+tlp
+tlpui

@@ -1,10 +1,23 @@
 #!/bin/bash
-echo "This is for hyprlock."
+read -p "Would you like to add your github and linkedin to display on hyprlock? [y/N]: " add_info
 
-read -p "Enter your github username (required): " github
-read -p "Enter your LinkedIn name (required): " linkedin
+if [[ "$add_info" == "y" || "$add_info" == "Y" ]]; then
+    read -p "Enter your github username (required): " github
+    read -p "Enter your LinkedIn name (required): " linkedin
+    
+    if [[ -z "$github" || -z "$linkedin" ]]; then
+        echo "Both GitHub username and LinkedIn name are required. Skipping."
+    else
+        echo " $github   $linkedin" > $HOME/.config/hypr/hyprlock-media
+        echo "Information added successfully."
+    fi
+else
+    echo "Skipping GitHub and LinkedIn information."
+fi
 
-echo " $github   $linkedin" > .config/hypr/hyprlock-media
+echo "Note: If you wish to change your information later, you can edit the contents of $HOME/.config/hypr/hyprlock-media"
+
+sleep 3
 
 mkdir -p "$HOME/.config"
 mkdir -p "$HOME/.config/kitty"
@@ -35,12 +48,13 @@ for folder in .config/*; do
   if [[ -e "$HOME/.config/$folder" ]]; then
     rm -rf "$HOME/.config/$folder"
   fi
-  ln -s "$(pwd)/.config/$folder" "$HOME/.config/$folder"
+  ln -s "$PWD/.config/$folder" "$HOME/.config/$folder"
 done
 
 selected_wallpaper="$HOME/wallpapers/walls/mountains.jpg"
 
 wal -i "$selected_wallpaper" -n && \
+	swww init && \
   swww img "$selected_wallpaper" && \
   cat ~/.cache/wal/colors-kitty.conf > ~/.config/kitty/current-theme.conf && \
 	source ~/.cache/wal/colors.sh && \

@@ -37,17 +37,27 @@ MISC="pokemon-colorscripts-git"
 BROWSER_OPTIONS=("firefox" "zen-browser-bin" "chromium" "google-chrome" "brave-bin" "opera")
 
 echo "Please select a browser to install:"
-select choice in "${BROWSER_OPTIONS[@]}" "Skip browser installation"; do
-    if [[ -z "$choice" ]]; then
-        echo "Invalid selection. Please try again."
-    elif [[ "$choice" == "Skip browser installation" ]]; then
-        BROWSER=""
-        echo "Browser installation will be skipped."
-        break
-    else
-        BROWSER="$choice"
-        break
+for i in "${!BROWSER_OPTIONS[@]}"; do
+    echo "[$((i+1))] ${BROWSER_OPTIONS[$i]}"
+done
+echo "[0] Skip browser installation"
+
+while true; do
+    read -p "Enter number [0-${#BROWSER_OPTIONS[@]}]: " selection
+    
+    if [[ "$selection" =~ ^[0-9]+$ ]]; then
+        if [[ "$selection" -eq 0 ]]; then
+            BROWSER=""
+            echo "Browser installation will be skipped."
+            break
+        elif [[ "$selection" -le "${#BROWSER_OPTIONS[@]}" ]]; then
+            BROWSER="${BROWSER_OPTIONS[$((selection-1))]}"
+            echo "Selected browser: $BROWSER"
+            break
+        fi
     fi
+    
+    echo "Invalid selection. Please enter a number between 0 and ${#BROWSER_OPTIONS[@]}."
 done
 
 read -p "Would you like to install packages for functionality on a laptop? [y/N]: " choice
@@ -89,5 +99,11 @@ paru -S --noconfirm \
   $DISPLAY_MANAGER \
   $MISC \
 	$LAPTOP
+
+if [[ -z "$LAPTOP" ]]; then
+	sudo systemctl enable tlp
+	sudo systemctl start tlp
+	sudo tlp start
+fi
 
 ./postinstall.sh
