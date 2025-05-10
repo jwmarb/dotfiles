@@ -41,6 +41,7 @@ done
 selected_wallpaper="$HOME/wallpapers/walls/mountains.jpg"
 
 wal -i "$selected_wallpaper" -n && \
+  swww img "$selected_wallpaper" && \
   cat ~/.cache/wal/colors-kitty.conf > ~/.config/kitty/current-theme.conf && \
 	source ~/.cache/wal/colors.sh && \
 	cp -r $wallpaper ~/wallpapers/pywallpaper.jpg
