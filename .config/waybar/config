@@ -86,6 +86,7 @@
       "warning": 30,
       "critical": 20
     },
+    "on-right-click": "tlpui",
     "format": "{capacity}% {icon}",
     "format-charging": "{capacity}% 󰂄",
     "format-plugged": "{capacity}% 󰂄 ",
