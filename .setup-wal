@@ -65,7 +65,7 @@ color15      #bfd3e2
 EOF
 
 cat <<EOF > $HOME/.cache/wal/colors-hyprland
-$wallpaper = /home/joseph/wallpapers/walls/mountains.jpg
+$wallpaper = $HOME/wallpapers/walls/mountains.jpg
 $foregroundCol = 0xffbfd3e2
 $backgroundCol = 0xff0e0a17
 $color0 = 0xff0e0a17
