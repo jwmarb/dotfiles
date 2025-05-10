@@ -53,8 +53,12 @@ done
 
 selected_wallpaper="$HOME/wallpapers/walls/mountains.jpg"
 
+swww query
+if [[ $? -eq 1 ]]; then
+	swww init
+fi
+
 wal -i "$selected_wallpaper" -n && \
-	swww init && \
   swww img "$selected_wallpaper" && \
   cat ~/.cache/wal/colors-kitty.conf > ~/.config/kitty/current-theme.conf && \
 	source ~/.cache/wal/colors.sh && \
