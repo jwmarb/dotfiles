@@ -1,9 +1,4 @@
 #!/bin/bash
-if [ "$EUID" -ne 0 ]; then
-  echo "Please run this script with sudo: sudo $0"
-  exit 1
-fi
-
 echo "This is for hyprlock."
 
 read -p "Enter your github username (required): " github
