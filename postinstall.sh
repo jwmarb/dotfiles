@@ -46,3 +46,9 @@ wal -i "$selected_wallpaper" -n && \
 	cp -r $wallpaper ~/wallpapers/pywallpaper.jpg
 
 echo "jwmarb's Dotfiles successfully installed. Restart your pc to apply changes."
+
+read -p "Would you like to restart your pc now? [Y/n]: " choice
+
+if [[ "$choice" =~ ^[Yy]$ ]]; then
+  sudo reboot
+fi
