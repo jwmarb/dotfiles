@@ -62,7 +62,7 @@ fi
 
 echo "Updating system..."
 
-sudo pacman -Syu
+sudo pacman -Syu --noconfirm
 
 if ! command -v paru &> /dev/null; then
   echo "Installing paru..."
@@ -75,7 +75,7 @@ fi
 
 echo "Performing package installation..."
 
-paru -Sy \
+paru -S --noconfirm \
   $FONTS \
   $BROWSER \
   $DEV_TOOLS \
