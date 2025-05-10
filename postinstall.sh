@@ -15,6 +15,10 @@ mkdir -p "$HOME/.config"
 mkdir -p "$HOME/.config/kitty"
 cp -r ./wallpapers "$HOME/"
 
+sudo chmod +x ./.setup-sddm
+sudo chmod +x ./.setup-wal
+sudo chmod +x ./.setup-gtk
+
 sudo ./.setup-sddm
 ./.setup-wal
 ./.setup-gtk
