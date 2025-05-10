@@ -13,7 +13,6 @@
   "modules-right": [
     "group/expand",
     "tray",
-    "pulseaudio",
     "bluetooth",
     "battery"
   ],
@@ -30,30 +29,12 @@
         2,
         3,
         4,
-        5
-      ]
-    }
-  },
-  "pulseaudio": {
-    "format": "{icon} {volume}%",
-    "tooltip": false,
-    "format-muted": "",
-    "on-click": "pamixer -t",
-    "on-click-right": "pavucontrol",
-    "on-scroll-up": "pamixer -i 5",
-    "on-scroll-down": "pamixer -d 5",
-    "scroll-step": 5,
-    "format-icons": {
-      "headphone": "",
-      "hands-free": "",
-      "headset": "",
-      "phone": "",
-      "portable": "",
-      "car": "",
-      "default": [
-        "",
-        "",
-        ""
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
       ]
     }
   },
@@ -84,8 +65,7 @@
     "tooltip-format-disconnected": "Error",
     "tooltip-format-wifi": "{essid} ({signalStrength}%) ",
     "tooltip-format-ethernet": "{ifname} 🖧 ",
-    "on-click": "nm-applet --indicator",
-    "on-click-right": "nm-connection-editor"
+    "on-click": "kitty nmtui"
   },
   "bluetooth": {
     "format-on": "󰂯",
@@ -124,7 +104,7 @@
     "interval": 30,
     "exec": "checkupdates | wc -l",
     "exec-if": "exit 0",
-    "on-click": "kitty sh -c 'paru -Syu; echo Done - Press enter to exit; read'; pkill -SIGRTMIN+8 waybar",
+    "on-click": "kitty sh -c 'yay -Syu; echo Done - Press enter to exit; read'; pkill -SIGRTMIN+8 waybar",
     "signal": 8,
     "tooltip": false
   },

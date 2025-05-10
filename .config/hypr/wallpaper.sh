@@ -6,7 +6,7 @@ menu() {
 }
 main() {
     cat $HOME/.cache/wal/colors-kitty.conf > /tmp/prev_wallpaper
-    choice=$(menu | wofi -c ~/.config/wofi/wallpaper -s ~/.config/wofi/style-wallpaper.css --show dmenu --prompt " Select Wallpaper:" -n)
+    choice=$(menu | wofi -c ~/.config/wofi/wallpaper -s ~/.config/wofi/style-wallpaper.css --show dmenu --prompt "Search for a wallpaper..." -n)
     selected_wallpaper=$(echo "$choice" | sed 's/^img://')
     wal -i "$selected_wallpaper" -n
     cat $HOME/.cache/wal/colors-kitty.conf > /tmp/current_wallpaper

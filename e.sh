@@ -9,8 +9,8 @@ count=1
 grep '^bind' "$HYPR_CONF" | while IFS= read -r line; do
     # Remove 'bind=' prefix
     content="$(echo "$line" | cut -d' ' -f3-)"
-		mainMod=$(grep '^\$mainMod = ' .config/hypr/hyprland.conf | sed 's/^\$mainMod = \([^ ]*\).*/\1/')
-
+		
+    
     # Extract modifiers (first part before comma)
     modifiers="${content%%,*}"
     content="${content#*,}"
@@ -31,8 +31,6 @@ grep '^bind' "$HYPR_CONF" | while IFS= read -r line; do
         cmd="$content"
         comment=""
     fi
-
-		modifiers=${modifiers/\$mainMod/$mainMod}
     
     # Format display with line number prefix (for reliable selection)
     if [[ -n "$comment" ]]; then

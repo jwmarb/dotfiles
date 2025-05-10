@@ -1,0 +1,14 @@
+#!/bin/bash
+sudo mkdir -p "/etc/sddm.conf.d"
+
+cat <<EOF > /etc/sddm.conf
+[Theme]
+Current=sddm-astronaut-theme 
+EOF
+
+cat <<EOF > /etc/sddm.conf.d/virtualkbd.conf
+[General]
+InputMethod=qtvirtualkeyboard
+EOF
+
+sudo systemctl enable sddm

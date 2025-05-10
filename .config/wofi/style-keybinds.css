@@ -1,4 +1,4 @@
-@import url('./.cache/wal/colors-waybar.css');
+@import url('.cache/wal/colors-waybar.css');
 
 @define-color mauve  @color9;
 @define-color red  @color9;
@@ -13,7 +13,7 @@
 
 * {
   all: unset;
-  font-family: 'Fira Code Nerd Font Mono', monospace;
+  font-family: 'FiraCode Nerd Font Mono', monospace;
   font-size: 1.125rem;
   letter-spacing: -0.05em;
   outline: none;
@@ -52,7 +52,7 @@ window {
 #input image {
   border: none;
   color: @red;
-  margin-right: 0.5rem;
+	margin-right: 0.5rem;
 }
 
 #input:focus {
@@ -60,7 +60,7 @@ window {
 }
 
 #text {
-  margin: 0 1rem;
+  margin: 0 1rem;n
   border: none;
   color: @text;
   outline: none;
@@ -68,8 +68,9 @@ window {
 
 #entry {
   border: none;
-  padding: 0.5rem;
+  padding: 0.33rem;
 }
+
 #entry arrow {
   border: none;
   color: @lavender;
@@ -80,7 +81,7 @@ window {
   background-color: alpha(@color10, 0.3);
 }
 #entry:selected #text {
-  color: @color10;
+  color: @color11;
 }
 
 #entry:drop(active) {

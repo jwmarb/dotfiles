@@ -13,7 +13,7 @@
 
 * {
   all: unset;
-  font-family: 'Fira Code Nerd Font Mono', monospace;
+  font-family: 'FiraCode Nerd Font Mono', monospace;
   font-size: 1.125rem;
   letter-spacing: -0.05em;
   outline: none;
@@ -42,36 +42,18 @@ window {
 #input {
   all: unset;
   margin: 1rem;
-  padding: 1.25rem 0.5rem 1.25rem 1.25rem;
+	padding: 0.5rem 0.75rem 0.5rem 0px ;
   border: none;
   outline: none;
   color: @text;
   border-radius: 1rem;
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
-  background-color: alpha(@foreground, 0.2);
 }
 #input image {
   border: none;
-  color: @red;
-  padding-right: 10px;
-}
-#input * {
-  border: none;
-  outline: none;
+  color: @background;
 }
 
-#input:focus {
-  outline: none;
-  border: none;
-
-  border-radius: 10;
-}
-#text {
-  margin: 0 1rem;
-  border: none;
-  color: @text;
-  outline: none;
-}
 
 #entry {
   border: none;
@@ -82,10 +64,9 @@ window {
   color: @lavender;
 }
 #entry:selected {
-  box-shadow: 1px 1px 5px rgba(255, 255, 255, 0.03);
   border: none;
   border-radius: 20px;
-  background-color: alpha(@color10, 0.16);
+  background-color: alpha(@color10, 0.3);
 }
 #entry:selected #text {
   color: @color10;
