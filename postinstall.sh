@@ -38,4 +38,6 @@ for folder in .config/*; do
   ln -s "$(pwd)/.config/$folder" "$HOME/.config/$folder"
 done
 
+source .config/hypr/wallpaper.sh && use_wallpaper "$HOME/wallpapers/walls/mountains.jpg"
+
 echo "jwmarb's Dotfiles successfully installed. Restart your pc to apply changes."
