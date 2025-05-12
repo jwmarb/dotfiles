@@ -1,14 +1,17 @@
 #!/bin/bash
 sudo mkdir -p "/etc/sddm.conf.d"
 
-cat <<EOF > /etc/sddm.conf
-[Theme]
-Current=sddm-astronaut-theme 
-EOF
+sudo rm -f /etc/sddm.conf && \
+  sudo cp $PWD/.config/sddm/sddm.conf /etc/sddm.conf
 
-cat <<EOF > /etc/sddm.conf.d/virtualkbd.conf
-[General]
-InputMethod=qtvirtualkeyboard
-EOF
+sudo rm -f /etc/sddm.conf.d/virtualkbd.conf && \
+  sudo cp $PWD/.config/sddm/virtualkbd.conf /etc/sddm.conf.d/virtualkbd.conf
+
+sudo chown -R $USER:$USER /usr/share/sddm/themes/sddm-astronaut-theme
+
+sudo rm -f /usr/share/sddm/themes/sddm-astronaut-theme/Themes/hyprlock.template.conf && \
+  cp $PWD/.config/sddm/hyprlock.template.conf /usr/share/sddm/themes/sddm-astronaut-theme/Themes/hyprlock.template.conf
+sudo rm -f /usr/share/sddm/themes/sddm-astronaut-theme/metadata.desktop && \
+  cp $PWD/.config/sddm/metadata.desktop /usr/share/sddm/themes/sddm-astronaut-theme/metadata.desktop
 
 sudo systemctl enable sddm

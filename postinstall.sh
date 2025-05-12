@@ -17,7 +17,7 @@ fi
 
 echo "Note: If you wish to change your information later, you can edit the contents of $HOME/.config/hypr/hyprlock-media"
 
-sleep 3
+sleep 1
 
 mkdir -p "$HOME/.config"
 mkdir -p "$HOME/.config/kitty"
@@ -27,7 +27,7 @@ sudo chmod +x ./.setup-sddm
 sudo chmod +x ./.setup-wal
 sudo chmod +x ./.setup-gtk
 
-sudo ./.setup-sddm
+./.setup-sddm
 ./.setup-wal
 ./.setup-gtk
 
@@ -53,16 +53,8 @@ done
 
 selected_wallpaper="$HOME/wallpapers/walls/mountains.jpg"
 
-swww query
-if [[ $? -eq 1 ]]; then
-	swww init
-fi
-
-wal -i "$selected_wallpaper" -n && \
-  swww img "$selected_wallpaper" && \
-  cat ~/.cache/wal/colors-kitty.conf > ~/.config/kitty/current-theme.conf && \
-	source ~/.cache/wal/colors.sh && \
-	cp -r $wallpaper ~/wallpapers/pywallpaper.jpg
+source .config/hypr/wallpaper.sh && \
+  use_wallpaper $selected_wallpaper
 
 echo "jwmarb's Dotfiles successfully installed."
 
@@ -72,4 +64,8 @@ if [[ -z "$DISPLAY" ]]; then
 	if [[ "$choice" =~ ^[Yy]$ ]]; then
 	  sudo reboot
 	fi
+elif [[ ! -z "$XDG_SESSION_TYPE" ]]; then 
+
+  echo "Installation updated. Since you are already running on a graphical environment, some changes may not be fully reflected until reboot."
+
 fi

@@ -30,7 +30,7 @@ THEMING="python-pywal swww waybar nwg-look qogir-icon-theme materia-gtk-theme"
 FILE_MANAGER="nemo nemo-webp-git nemo-fileroller"
 AUDIO="pipewire pipewire-pulse pipewire-alsa pipewire-jack pavucontrol"
 NETWORK="nm-connection-editor network-manager-applet"
-UTILITIES="wofi wdisplays pamixer"
+UTILITIES="wofi wdisplays pamixer inotify-tools"
 DISPLAY_MANAGER="sddm sddm-astronaut-theme qt6-svg qt6-virtualkeyboard qt6-multimedia-ffmpeg"
 MISC="pokemon-colorscripts-git"
 
@@ -84,7 +84,9 @@ if ! command -v paru &> /dev/null; then
   echo "Installing paru..."
   git clone https://aur.archlinux.org/paru.git && \
     cd paru && \
-    makepkg -si
+    makepkg -si \
+    cd .. && \
+    rm -rf paru
 else
   echo "paru is already installed, skipping..."
 fi
