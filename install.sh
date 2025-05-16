@@ -108,7 +108,7 @@ paru -S --noconfirm \
   $MISC \
 	$LAPTOP
 
-if [[ -z "$LAPTOP" ]]; then
+if [[ ! -z "$LAPTOP" ]]; then
 	sudo systemctl enable tlp
 	sudo systemctl start tlp
 	sudo tlp start
