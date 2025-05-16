@@ -28,7 +28,7 @@ backgroundAlpha() {
 use_wallpaper() {
   swww query
   if [[ $? -eq 1 ]]; then
-    swww init
+    swww-daemon
   fi
   selected_wallpaper=$1
   wal -i "$selected_wallpaper" -n
