@@ -28,13 +28,13 @@ backgroundAlpha() {
 use_wallpaper() {
   selected_wallpaper=$1
   wal -i "$selected_wallpaper" -n
-  pywalfox update
   swww query
-  if [[ $? -eq 1 ]]; then
-		echo "Did not detect swww-daemon"
-	else
+  if [[ ! $? -eq 1 ]]; then
   	swww img "$selected_wallpaper" --transition-type any --transition-fps 60 --transition-duration .5
+	else
+		echo "Could not detect swww-daemon. Wallpaper may not change."
   fi
+  pywalfox update
 	swaync-client --reload-css --skip-wait
   cat ~/.cache/wal/colors-kitty.conf > ~/.config/kitty/current-theme.conf
   pkill -USR2 cava 2>/dev/null
