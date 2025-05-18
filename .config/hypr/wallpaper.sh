@@ -26,13 +26,14 @@ backgroundAlpha() {
   echo "rgba($r, $g, $b, $alpha)"
 }
 use_wallpaper() {
-  swww query
-  if [[ $? -eq 1 ]]; then
-    swww-daemon
-  fi
   selected_wallpaper=$1
   wal -i "$selected_wallpaper" -n
-  swww img "$selected_wallpaper" --transition-type any --transition-fps 60 --transition-duration .5
+  swww query
+  if [[ ! $? -eq 1 ]]; then
+  	swww img "$selected_wallpaper" --transition-type any --transition-fps 60 --transition-duration .5
+	else
+		echo "Could not detect swww-daemon. Wallpaper may not change."
+  fi
   pywalfox update
   swaync-client --reload-css
   cat ~/.cache/wal/colors-kitty.conf > ~/.config/kitty/current-theme.conf
