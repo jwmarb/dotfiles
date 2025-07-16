@@ -35,7 +35,7 @@ use_wallpaper() {
 		echo "Could not detect swww-daemon. Wallpaper may not change."
   fi
   pywalfox update
-  swaync-client --reload-css
+	swaync-client --reload-css --skip-wait
   cat ~/.cache/wal/colors-kitty.conf > ~/.config/kitty/current-theme.conf
   pkill -USR2 cava 2>/dev/null
   source ~/.cache/wal/colors.sh && cp -r $wallpaper ~/wallpapers/pywallpaper.jpg && cp -r $wallpaper /usr/share/sddm/themes/sddm-astronaut-theme/Backgrounds/pywallpaper.jpg
