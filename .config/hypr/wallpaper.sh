@@ -46,6 +46,9 @@ use_wallpaper() {
   while IFS= read -r line; do
     eval "echo \"$line\""
   done < /usr/share/sddm/themes/sddm-astronaut-theme/Themes/hyprlock.template.conf  > /usr/share/sddm/themes/sddm-astronaut-theme/Themes/hyprlock.conf
+
+  cp ~/.cache/wal/mako-config ~/.config/mako/config
+  makoctl reload
 }
 main() {
     cat $HOME/.cache/wal/colors-kitty.conf > /tmp/prev_wallpaper
