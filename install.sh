@@ -22,17 +22,17 @@ fi
 
 CONFIG_PATH="$HOME/.config/hypr/hyprland.conf"
 
-FONTS="ttf-fira-code ttf-firacode-nerd ttf-font-awesome noto-fonts-emoji illogical-impulse-bibata-modern-classic-bin ttf-koruri"
+FONTS="ttf-fira-code ttf-firacode-nerd ttf-font-awesome noto-fonts-emoji bibata-cursor-theme-bin ttf-koruri"
 DEV_TOOLS="cmake base-devel"
 TERMINAL="kitty fastfetch starship btop fd"
-HYPRLAND="hyprland uwsm hpyrsome-git mako hypridle hyprpicker hyprshot hyprlock wlogout wayfreeze-git xorg-xwayland xwaylandvideobridge mako"
+HYPRLAND="hyprland uwsm mako hypridle hyprpicker hyprshot hyprlock wlogout wayfreeze xorg-xwayland xwaylandvideobridge mako hyprsome"
 THEMING="python-pywal swww waybar nwg-look qogir-icon-theme materia-gtk-theme"
 FILE_MANAGER="nemo nemo-webp-git nemo-fileroller"
 AUDIO="pipewire pipewire-pulse pipewire-alsa pipewire-jack pavucontrol"
 NETWORK="nm-connection-editor network-manager-applet"
 UTILITIES="wofi wdisplays pamixer inotify-tools"
 DISPLAY_MANAGER="sddm sddm-astronaut-theme qt6-svg qt6-virtualkeyboard qt6-multimedia-ffmpeg"
-MISC="pokemon-colorscripts-git"
+MISC="pokemon-colorscripts"
 
 BROWSER_OPTIONS=("firefox" "zen-browser-bin" "chromium" "google-chrome" "brave-bin" "opera")
 
@@ -106,7 +106,7 @@ paru -S --noconfirm \
   $UTILITIES \
   $DISPLAY_MANAGER \
   $MISC \
-	$LAPTOP
+  $LAPTOP
 
 if [[ ! -z "$LAPTOP" ]]; then
 	sudo systemctl enable tlp
@@ -114,4 +114,4 @@ if [[ ! -z "$LAPTOP" ]]; then
 	sudo tlp start
 fi
 
-./postinstall.sh
+cd ~/dotfiles && ./postinstall.sh
