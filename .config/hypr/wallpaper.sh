@@ -28,11 +28,11 @@ backgroundAlpha() {
 use_wallpaper() {
   selected_wallpaper=$1
   wal -i "$selected_wallpaper" -n
-  swww query
+  awww query
   if [[ ! $? -eq 1 ]]; then
-  	swww img "$selected_wallpaper" --transition-type any --transition-fps 60 --transition-duration .5
+  	awww img "$selected_wallpaper" --transition-type any --transition-fps 60 --transition-duration .5
 	else
-		echo "Could not detect swww-daemon. Wallpaper may not change."
+		echo "Could not detect awww-daemon. Wallpaper may not change."
   fi
   pywalfox update
 	swaync-client --reload-css --skip-wait
