@@ -21,3 +21,6 @@ gtk-xft-hinting=1
 gtk-xft-hintstyle="hintslight"
 gtk-xft-rgba="rgb"
 EOF
+
+# Set dark mode for portal-aware apps (Firefox, Electron, libadwaita)
+gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'

@@ -18,7 +18,6 @@
   ],
   "hyprland/workspaces": {
     "format": "{icon}",
-    "output": "DP-2",
     "format-icons": {
       "active": "",
       "default": "",

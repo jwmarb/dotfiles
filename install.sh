@@ -30,7 +30,7 @@ THEMING="python-pywal awww waybar nwg-look qogir-icon-theme materia-gtk-theme"
 FILE_MANAGER="nemo nemo-webp-git nemo-fileroller"
 AUDIO="pipewire pipewire-pulse pipewire-alsa pipewire-jack pavucontrol"
 NETWORK="nm-connection-editor network-manager-applet"
-UTILITIES="wofi wdisplays pamixer inotify-tools"
+UTILITIES="wofi wdisplays pamixer inotify-tools socat"
 DISPLAY_MANAGER="sddm sddm-astronaut-theme qt6-svg qt6-virtualkeyboard qt6-multimedia-ffmpeg"
 MISC="pokemon-colorscripts"
 
