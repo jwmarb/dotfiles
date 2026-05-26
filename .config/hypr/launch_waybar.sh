@@ -1,14 +1,18 @@
 #!/bin/bash
 
+# Kill previous instances of this script (prevents duplicate managers)
+pkill -f "launch_waybar.sh" -o 2>/dev/null && sleep 0.2
+
 WAYBAR_DIR="$HOME/.config/waybar"
 GENERATE="$WAYBAR_DIR/scripts/generate_config.sh"
 CONFIG_FILES="$WAYBAR_DIR/config $WAYBAR_DIR/style.css $HOME/.cache/wal/colors-waybar.css"
 SOCKET="$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock"
 
-trap "killall waybar; kill 0" EXIT
+trap "killall waybar 2>/dev/null; kill 0" EXIT
 
 restart_waybar() {
     killall waybar 2>/dev/null
+    while pgrep -x waybar >/dev/null; do sleep 0.1; done
     bash "$GENERATE"
     waybar &
 }
