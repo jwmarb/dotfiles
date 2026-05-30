@@ -19,6 +19,33 @@ echo "Note: If you wish to change your information later, you can edit the conte
 
 sleep 1
 
+# Fix hyprlock PAM config so password auth works out of the box.
+# The default config includes system-auth which uses pam_faillock,
+# causing password rejection after a few failed attempts.
+if [[ ! -f /etc/pam.d/hyprlock ]] || grep -q "include.*login" /etc/pam.d/hyprlock; then
+  echo "Configuring PAM for hyprlock..."
+  sudo tee /etc/pam.d/hyprlock >/dev/null <<'EOF'
+#%PAM-1.0
+
+auth      required  pam_unix.so try_first_pass nullok
+auth      optional  pam_permit.so
+auth      required  pam_env.so
+
+account   required  pam_unix.so
+account   optional  pam_permit.so
+
+password  required  pam_unix.so try_first_pass nullok shadow
+
+session   required  pam_unix.so
+session   optional  pam_permit.so
+EOF
+fi
+
+# Reset any existing faillock lockout for the current user
+if command -v faillock &>/dev/null; then
+  sudo faillock --user "$USER" --reset 2>/dev/null
+fi
+
 mkdir -p "$HOME/.config"
 mkdir -p "$HOME/.config/kitty"
 cp -r ./wallpapers "$HOME/"
