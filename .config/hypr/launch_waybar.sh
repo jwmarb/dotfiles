@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Kill previous instances of this script (prevents duplicate managers)
-pkill -f "launch_waybar.sh" -o 2>/dev/null && sleep 0.2
+pgrep -f "launch_waybar.sh" | grep -v "^$$\$" | xargs -r kill 2>/dev/null && sleep 0.2
 
 WAYBAR_DIR="$HOME/.config/waybar"
 GENERATE="$WAYBAR_DIR/scripts/generate_config.sh"
