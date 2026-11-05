@@ -79,6 +79,7 @@ Colors generated to `~/.cache/wal/`:
 - `colors-waybar.css` - CSS variables (`@color0`-`@color15`)
 - `colors-kitty.conf` - Kitty terminal colors
 - Scripts source colors before using them; wallpaper changes trigger full theme update
+- **Brand**: the jwmarb brand kit lives in `~/jwmarb` (read its `AGENTS.md` first). It does **not** replace Wal here: desktop colours stay generated per wallpaper, and the brand's only fixed element on the desktop is the accent `#23ce6b`. Do not pin this palette to the brand tokens.
 
 ## Key Patterns
 - **Config symlinking**: `postinstall.sh` removes existing configs and symlinks `.config/*` to `~/.config/`
