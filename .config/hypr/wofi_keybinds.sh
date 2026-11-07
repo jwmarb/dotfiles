@@ -1,74 +1,42 @@
 #!/bin/bash
+# SUPER+H: searchable list of Hyprland keybinds; selecting one runs it.
+# Hyprland 0.57+ (Lua config): binds are read from the KEYBIND_MENU table that
+# hyprland.lua builds, via `hyprctl repl`, and run by index through the same
+# dispatcher the key itself uses. Nothing here parses the config file.
 
-HYPR_CONF="$HOME/.config/hypr/hyprland.conf"
-TMP_DIR=$(mktemp -d)
-trap 'rm -rf "$TMP_DIR"' EXIT
+# One tab-separated line per bind: index, keys, label
+LIST=$(hyprctl repl 'local out = {}
+for i, b in ipairs(KEYBIND_MENU or {}) do
+    local label = tostring(b.label):gsub("[\t\n]", " ")
+    out[#out + 1] = i .. "\t" .. b.keys .. "\t" .. label
+end
+return table.concat(out, "\n")' 2>/dev/null)
 
-# Process each bind line
-count=1
-grep '^bind' "$HYPR_CONF" | while IFS= read -r line; do
-    # Remove 'bind=' prefix
-    content="$(echo "$line" | cut -d' ' -f3-)"
-		mainMod=$(grep '^\$mainMod = ' .config/hypr/hyprland.conf | sed 's/^\$mainMod = \([^ ]*\).*/\1/')
-
-    # Extract modifiers (first part before comma)
-    modifiers="${content%%,*}"
-    content="${content#*,}"
-    
-    # Extract key (next part before comma)
-    key="${content%%,*}"
-    content="${content#*,}"
-    
-    # The rest is the command, check for comments
-    if [[ "$content" == *"#"* ]]; then
-        cmd="${content%%#*}"
-        comment="${content#*#}"
-        
-        # Trim whitespace
-        cmd="${cmd%"${cmd##*[![:space:]]}"}"
-        comment="${comment#"${comment%%[![:space:]]*}"}"
-    else
-        cmd="$content"
-        comment=""
-    fi
-
-		modifiers=${modifiers/\$mainMod/$mainMod}
-    
-    # Format display with line number prefix (for reliable selection)
-    if [[ -n "$comment" ]]; then
-        display="[$count] <b>$modifiers +$key</b>  <span color='gray'>$cmd</span> <i>$comment</i>"
-    else
-        display="[$count] <b>$modifiers +$key</b>  <span color='gray'>$cmd</span>"
-    fi
-    
-    # Store in files
-    echo "$display" >> "$TMP_DIR/display.txt"
-    echo "$cmd" >> "$TMP_DIR/commands.txt"
-    
-    ((count++))
-done
-
-# If we have keybindings, show the menu
-if [[ -s "$TMP_DIR/display.txt" ]]; then
-    # Show wofi menu
-    SELECTION=$(cat "$TMP_DIR/display.txt" | wofi -c $HOME/.config/wofi/keybinds -s $HOME/.config/wofi/style-keybinds.css -dmenu -i -p "Hyprland Keybinds:")
-    
-    if [[ -n "$SELECTION" ]]; then
-        # Extract line number from selection
-        line_num=$(echo "$SELECTION" | grep -o '^\[[0-9]*\]' | tr -d '[]')
-        
-        # Get the command for this line
-        CMD=$(sed -n "${line_num}p" "$TMP_DIR/commands.txt")
-        
-        # Execute the command
-        if [[ "$CMD" == exec* ]]; then
-            EXEC_CMD="${CMD#exec }"
-            eval "$EXEC_CMD" &
-        else
-            hyprctl dispatch "$CMD"
-        fi
-    fi
-else
-    echo "No keybindings found in $HYPR_CONF"
+if [[ -z "$LIST" || "$LIST" == error* ]]; then
+    notify-send "Keybinds" "Could not read keybinds from Hyprland (is KEYBIND_MENU defined in hyprland.lua?)" 2>/dev/null
+    echo "Could not read keybinds from Hyprland: $LIST" >&2
     exit 1
 fi
+
+escape_markup() {
+    local s="$1"
+    s="${s//&/&amp;}"
+    s="${s//</&lt;}"
+    s="${s//>/&gt;}"
+    printf '%s' "$s"
+}
+
+DISPLAY_LINES=""
+while IFS=$'\t' read -r idx keys label; do
+    [[ -z "$idx" ]] && continue
+    DISPLAY_LINES+="[$idx] <b>$(escape_markup "$keys")</b>  <span color='gray'>$(escape_markup "$label")</span>"$'\n'
+done <<< "$LIST"
+
+SELECTION=$(printf '%s' "$DISPLAY_LINES" | wofi -c "$HOME/.config/wofi/keybinds" -s "$HOME/.config/wofi/style-keybinds.css" -dmenu -i -p "Hyprland Keybinds:")
+[[ -z "$SELECTION" ]] && exit 0
+
+IDX=$(grep -o '^\[[0-9]*\]' <<< "$SELECTION" | tr -d '[]')
+[[ "$IDX" =~ ^[0-9]+$ ]] || exit 1
+
+# Run the bind's own dispatcher (or Lua function) in the live session
+hyprctl repl "local b = KEYBIND_MENU[$IDX]; if not b then return 'no such bind' end; return hl.dispatch(b.action).ok" >/dev/null
