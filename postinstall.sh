@@ -15,6 +15,31 @@ else
     echo "Skipping GitHub and LinkedIn information."
 fi
 
+# Optional: pi coding agent config (extensions, agents, skills) — jwmarb/dotpi
+read -p "Would you like to install the pi config (jwmarb/dotpi)? [y/N]: " pi_choice
+
+if [[ "$pi_choice" =~ ^[yY]$ ]]; then
+    if command -v pi &> /dev/null; then
+        if [[ -d "$HOME/.pi/.git" ]]; then
+            echo "Updating existing pi config..."
+            git -C "$HOME/.pi" pull --ff-only
+        elif [[ -e "$HOME/.pi" ]]; then
+            echo "Refusing to touch existing $HOME/.pi (not a git repo)."
+        else
+            echo "Cloning pi config into ~/.pi..."
+            git clone --depth 1 https://github.com/jwmarb/dotpi.git "$HOME/.pi"
+        fi
+        if [[ -f "$HOME/.pi/agent/.env.example" && ! -f "$HOME/.pi/agent/.env" ]]; then
+            cp "$HOME/.pi/agent/.env.example" "$HOME/.pi/agent/.env"
+            echo "Edit $HOME/.pi/agent/.env and add your LITELLM keys."
+        fi
+    else
+        echo "pi not found on PATH — skipping pi config."
+    fi
+else
+    echo "Skipping pi config."
+fi
+
 echo "Note: If you wish to change your information later, you can edit the contents of $HOME/.config/hypr/hyprlock-media"
 
 sleep 1
