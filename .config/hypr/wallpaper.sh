@@ -28,12 +28,18 @@ backgroundAlpha() {
 use_wallpaper() {
   selected_wallpaper=$1
   wal -i "$selected_wallpaper" -n
-  awww query
-  if [[ ! $? -eq 1 ]]; then
+  # Start the wallpaper daemon if it isn't running (e.g. it crashed or autostart missed it)
+  if ! awww query >/dev/null 2>&1; then
+    setsid -f awww-daemon >/dev/null 2>&1 < /dev/null
+    for _ in $(seq 20); do awww query >/dev/null 2>&1 && break; sleep 0.1; done
+  fi
+  if awww query >/dev/null 2>&1; then
   	awww img "$selected_wallpaper" --transition-type any --transition-fps 60 --transition-duration .5
 	else
-		echo "Could not detect awww-daemon. Wallpaper may not change."
+		echo "Could not start awww-daemon. Wallpaper may not change."
   fi
+  # hyprland.lua reads wal colors via io.open, which Hyprland doesn't watch: reload to apply new border colors
+  hyprctl reload config-only >/dev/null
   pywalfox update
 	swaync-client --reload-css --skip-wait
   cat ~/.cache/wal/colors-kitty.conf > ~/.config/kitty/current-theme.conf

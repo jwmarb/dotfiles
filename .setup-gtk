@@ -1,6 +1,16 @@
 #!/bin/bash
+set -uo pipefail
+DOTFILES_DIR="${DOTFILES_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)}"
+# shellcheck source=.setup-lib
+# .setup-lib is required: a failed source must be fatal (no set -e, so a
+# bare source would be silently ignored).
+source "$DOTFILES_DIR/.setup-lib" || {
+  echo "error: missing $DOTFILES_DIR/.setup-lib (incomplete dotfiles tree; re-run install.sh to re-fetch it)" >&2
+  exit 1
+}
 
-cat <<EOF > $HOME/.gtkrc-2.0
+gtkrc_content() {
+  cat <<EOF
 # DO NOT EDIT! This file will be overwritten by nwg-look.
 # Any customization should be done in ~/.gtkrc-2.0.mine instead.
 
@@ -21,6 +31,22 @@ gtk-xft-hinting=1
 gtk-xft-hintstyle="hintslight"
 gtk-xft-rgba="rgb"
 EOF
+}
+
+f="$HOME/.gtkrc-2.0"
+new=$(gtkrc_content)
+if [[ -f $f && "$(<"$f")" == "$new" ]]; then
+  info "$f unchanged; skipping"
+else
+  # Never overwrite when the backup failed: that would lose the existing
+  # file without keeping a copy.
+  if ! backup_path "$f"; then
+    warn "backup failed for $f; not overwriting it"
+  else
+    printf '%s\n' "$new" > "$f"
+    info "wrote $f"
+  fi
+fi
 
 # Set dark mode for portal-aware apps (Firefox, Electron, libadwaita)
-gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+run gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'

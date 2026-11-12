@@ -19,7 +19,14 @@ restart_waybar() {
 
 restart_waybar
 
-socat -U - UNIX-CONNECT:"$SOCKET" | while IFS= read -r line; do
+# Hyprland event socket reader (python3 instead of socat, which isn't installed)
+listen_events() {
+    python3 -u -c 'import socket,sys
+s=socket.socket(socket.AF_UNIX); s.connect(sys.argv[1])
+for line in s.makefile("r", errors="replace"): sys.stdout.write(line)' "$SOCKET"
+}
+
+listen_events | while IFS= read -r line; do
     case "$line" in
         monitoradded*|monitorremoved*)
             sleep 1

@@ -7,7 +7,9 @@ WAYBAR_DIR="$HOME/.config/waybar"
 SOURCE="${1:-$WAYBAR_DIR/config}"
 OUTPUT="${2:-$WAYBAR_DIR/config}"
 
-mapfile -t MONITORS < <(hyprctl monitors -j | jq -r '.[].name')
+# Sort by monitor ID: Hyprland's keybinds map monitor N to workspaces N*10+1..N*10+10,
+# and `hyprctl monitors` doesn't list monitors in ID order.
+mapfile -t MONITORS < <(hyprctl monitors -j | jq -r 'sort_by(.id) | .[].name')
 
 if [[ ${#MONITORS[@]} -eq 0 ]]; then
     exit 0
@@ -50,6 +52,12 @@ content = re.sub(
     flags=re.DOTALL
 )
 
-with open('$OUTPUT', 'w') as f:
-    f.write(content)
+with open('$OUTPUT', 'r') as f:
+    current = f.read()
+
+# Only write when something changed: launch_waybar.sh restarts waybar on every
+# write to the config, and it runs this script on each restart.
+if content != current:
+    with open('$OUTPUT', 'w') as f:
+        f.write(content)
 "
