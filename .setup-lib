@@ -1,0 +1,159 @@
+# .setup-lib — shared helpers for the dotfiles setup scripts.
+#
+# Sourced (not executed) by postinstall.sh, .setup-sddm and .setup-gtk.
+# install.sh keeps its own inline copy of the same helpers, because it must
+# run before anything is fetched.
+# keep in sync with the inline copy in install.sh
+
+: "${DRY_RUN:=0}" "${ASSUME_YES:=0}"
+: "${BACKUP_DIR:=$HOME/.config-backup-$(date +%Y%m%d-%H%M%S)}"
+export DRY_RUN ASSUME_YES BACKUP_DIR
+
+# --- logging (all to stderr, so $(...) captures stay clean) -------------------
+
+info() {
+  printf 'info: %s\n' "$*" >&2
+}
+
+warn() {
+  printf 'warn: %s\n' "$*" >&2
+}
+
+die() {
+  printf 'error: %s\n' "$*" >&2
+  exit 1
+}
+# DRY_RUN / ASSUME_YES may come from the environment (or from parse_args
+# later). Accept only 0, 1 or empty — the :=0 defaults above already
+# normalise empty. Die on anything else rather than coercing, so nobody
+# ever runs for real believing it was a dry run.
+for _v in DRY_RUN ASSUME_YES; do
+  case ${!_v} in
+    ''|0|1) ;;
+    *) die "$_v must be 0 or 1 (got '${!_v}'); unset it and re-run" ;;
+  esac
+done
+
+# --- execution -----------------------------------------------------------------
+
+# run CMD [ARGS...] — run CMD, or just print it when DRY_RUN=1.
+# The [dry-run] notice goes to stderr like info/warn/die, so a caller's
+# >/dev/null cannot hide it.
+run() {
+  if [[ $DRY_RUN -eq 1 ]]; then
+    {
+      printf '[dry-run]'
+      printf ' %q' "$@"
+      printf '\n'
+    } >&2
+    return 0
+  fi
+  "$@"
+}
+
+# --- prompts (all read from /dev/tty) -------------------------------------------
+
+# ask_yn PROMPT DEFAULT [YES_ANSWER]
+# Prints "PROMPT [Y/n]:" (or [y/N]) and returns 0 for a yes-like answer.
+# Under ASSUME_YES=1 the answer is YES_ANSWER (defaulting to DEFAULT) and a
+# "PROMPT -> ANSWER (--yes)" line is logged to stderr.
+ask_yn() {
+  local prompt=$1 default=${2:-y}
+  local yes_answer=${3:-$default}
+  local ans
+  if [[ $ASSUME_YES -eq 1 ]]; then
+    ans=$yes_answer
+    printf '%s -> %s (--yes)\n' "$prompt" "$ans" >&2
+  else
+    local suffix
+    if [[ $default =~ ^[Yy] ]]; then suffix='[Y/n]'; else suffix='[y/N]'; fi
+    ans=''
+    read -r -p "$prompt $suffix: " ans </dev/tty || ans=$default
+    ans=${ans:-$default}
+  fi
+  [[ $ans =~ ^[Yy]([Ee][Ss])?$ ]]
+}
+
+# ask_line PROMPT YES_VALUE
+# Prints "PROMPT " and echoes the answer line. Under ASSUME_YES=1 the answer
+# is YES_VALUE. Log lines go to stderr so $(ask_line ...) stays clean.
+ask_line() {
+  local prompt=$1 yes_value=${2-}
+  local ans=''
+  if [[ $ASSUME_YES -eq 1 ]]; then
+    ans=$yes_value
+    printf '%s -> %s (--yes)\n' "$prompt" "$ans" >&2
+  else
+    read -r -p "$prompt " ans </dev/tty || ans=''
+  fi
+  printf '%s\n' "$ans"
+}
+
+# --- arguments -------------------------------------------------------------------
+
+# parse_args [ARGS...] — -y/--yes -> ASSUME_YES=1, -n/--dry-run -> DRY_RUN=1,
+# -h/--help -> usage + exit 0, anything else -> die "Unknown option".
+parse_args() {
+  while [[ $# -gt 0 ]]; do
+    case $1 in
+      -y|--yes) ASSUME_YES=1 ;;
+      -n|--dry-run) DRY_RUN=1 ;;
+      -h|--help)
+        cat <<EOF >&2
+Usage: ${0##*/} [options]
+
+  -y, --yes      Accept the default answer for every prompt (non-interactive)
+  -n, --dry-run  Print system commands instead of running them
+  -h, --help     Show this help
+EOF
+        exit 0
+        ;;
+      *) die "Unknown option '$1' (see --help)" ;;
+    esac
+    shift
+  done
+  export ASSUME_YES DRY_RUN
+}
+
+require_tty_or_yes() {
+  if [[ $ASSUME_YES -eq 1 ]]; then
+    return 0
+  fi
+  if { : </dev/tty; } 2>/dev/null; then
+    return 0
+  fi
+  die "No terminal for prompts. Re-run non-interactively with: curl -fsSL https://raw.githubusercontent.com/jwmarb/dotfiles/main/install.sh | bash -s -- --yes"
+}
+
+# --- backup -----------------------------------------------------------------------
+
+# backup_path ABS — move an existing file/dir/symlink into $BACKUP_DIR,
+# preserving its path relative to $HOME. $BACKUP_DIR is created lazily: this
+# function is the only place that creates it. No-op (returns 0) when ABS does
+# not exist and is not a symlink. On any failure (mkdir or mv) it warns,
+# leaves the source in place and returns 1 — callers must check.
+backup_path() {
+  local abs=$1
+  [[ -e $abs || -L $abs ]] || return 0
+  local rel target
+  rel=${abs#"$HOME"/}
+  if ! mkdir -p "$BACKUP_DIR/$(dirname "$rel")"; then
+    warn "backup failed for $rel: cannot create $BACKUP_DIR/$(dirname "$rel")"
+    return 1
+  fi
+  target="$BACKUP_DIR/$rel"
+  # Never clobber an existing backup: suffix .1, .2, … on collision.
+  if [[ -e $target || -L $target ]]; then
+    local n=1
+    while [[ -e $target.$n || -L $target.$n ]]; do n=$((n + 1)); done
+    target="$target.$n"
+  fi
+  # Don't trust mv -n's exit status: GNU mv -n can exit 0 when it declines to
+  # overwrite. Success means the source is gone and the backup exists.
+  mv -n "$abs" "$target"
+  if [[ -e $abs || -L $abs ]] || [[ ! -e $target && ! -L $target ]]; then
+    warn "backup failed for $rel: could not move to $target"
+    return 1
+  fi
+  info "backed up $rel -> $target"
+}
